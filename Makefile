@@ -2,7 +2,7 @@
 
 # ----- Project Macro ----- #
 UnitTestCategory := AllTests
-UnitTestName := MyAlgorithmTest
+UnitTestName := SCDCalibratePanels2Test
 TestScript := test.py
 
 # ------------------------------------------------------ #
@@ -20,7 +20,7 @@ HOSTNAME  := $(shell hostname)
 BASEOPTS  := -GNinja -DENABLE_MANTIDPLOT=OFF -DCMAKE_INSTALL_PREFIX=$(INTALLDIR) -DCMAKE_BUILD_TYPE=RelWithDebInfo
 
 # ----- GDB -----
-TestExecutable := $(BUILDDIR)/bin/AlgorithmsTest
+TestExecutable := $(BUILDDIR)/bin/CrystalTest
 
 # ----- BUILD OPTIONS -----
 # ----- BUILD OPTIONS -----
@@ -48,7 +48,12 @@ endif
 UNTCMDS := ctest --output-on-failure -V -R $(UnitTestName)
 
 # ----- Targets -----
-.PHONY: test qtest build unittest docs init list clean archive
+.PHONY: test qtest build unittest docs init list clean archive report
+
+report:
+	@echo "generate clean report"
+	~/.local/bin/jupyter-nbconvert --to latex --no-input Profile_Corelli_parameterSpace.ipynb
+	pdflatex Profile_Corelli_parameterSpace.tex
 
 test: build docs unittest
 	@echo "build everything, run unittest and customized testing script"
